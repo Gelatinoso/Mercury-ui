@@ -15,7 +15,7 @@ function love.load()
 end
 
 -- State used to reflect data on the rendering
-local searchEdit = {value = ""}
+local searchEdit = {value = "", placeholder = "Search..."}
 local packages = mercury.fetchPackages() or {}
 local title = "List of all packages available on the Mercury repository."
 
@@ -27,10 +27,10 @@ function love.update(dt)
             local x, y, width, height = ui:windowGetContentRegion()
             -- Tabs bar
             ui:menubarBegin()
-                ui:layoutRow("dynamic", 30, 3)
-                    height = height - 30
-                    if ui:button("Available") then
-                        title = "List of all packages available on the Mercury repository."
+                ui:layoutRow("dynamic", 30, 4)
+                ui:label("Mercury UI")
+                if ui:button("Available") then
+                    title = "List of all packages available on the Mercury repository."
                         searchEdit.value = ""
                         packages = mercury.fetchPackages()
                     end
@@ -40,6 +40,7 @@ function love.update(dt)
                         packages = mercury.getInstalled()
                     end
                     ui:edit("simple", searchEdit)
+                    height = height - 30
             ui:menubarEnd()
             -- Packages list
             ui:layoutRow("dynamic", height, 1)
