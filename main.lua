@@ -33,7 +33,8 @@ function love.update(dt)
                         title = "List of all packages available on the Mercury repository."
                         searchEdit.value = ""
                         packages = mercury.fetchPackages()
-                    elseif ui:button("Installed") then
+                    end
+                    if ui:button("Installed") then
                         title = "List of all the packages that already installed on the game."
                         searchEdit.value = ""
                         packages = mercury.getInstalled()
