@@ -15,13 +15,14 @@ function love.load()
 end
 
 -- State used to reflect data on the rendering
-local searchEdit = {value = "", placeholder = "Search..."}
+local searchFilter = {value = "", placeholder = "Search..."}
 local packages = mercury.fetchPackages() or {}
 local title = "List of all packages available on the Mercury repository."
 
 function love.update(dt)
     local windowWidth = love.graphics.getWidth()
     local windowHeight = love.graphics.getHeight()
+    -- LuaFormatter off
     ui:frameBegin()
         if ui:windowBegin("mercury", 0, 0, windowWidth, windowHeight, "border") then
             local x, y, width, height = ui:windowGetContentRegion()
@@ -30,16 +31,16 @@ function love.update(dt)
                 ui:layoutRow("dynamic", 30, 4)
                 if ui:button("Available") then
                     title = "List of all packages available on the Mercury repository."
-                    searchEdit.value = ""
+                    searchFilter.value = ""
                         packages = mercury.fetchPackages()
                     end
                     if ui:button("Installed") then
                         title = "List of all the packages that already installed on the game."
-                        searchEdit.value = ""
+                        searchFilter.value = ""
                         packages = mercury.getInstalled()
                     end
                 ui:spacing(1)
-                ui:edit("simple", searchEdit)
+                ui:edit("simple", searchFilter)
                 height = height - 30
             ui:menubarEnd()
             -- Packages list
@@ -51,7 +52,7 @@ function love.update(dt)
                     ui:layoutRow("dynamic", height / 3, 3)
                     local packagesInRow = 0
                     for packageIndex, package in pairs(packages) do
-                        if (package.label:find(searchEdit.value)) then
+                        if (package.label:find(searchFilter.value)) then
                             packagesInRow = packagesInRow + 1
                             ui:button(package.label)
                             if packagesInRow == 3 then
@@ -63,6 +64,7 @@ function love.update(dt)
         end
         ui:windowEnd()
     ui:frameEnd()
+    -- LuaFormatter on
 end
 
 function love.draw()

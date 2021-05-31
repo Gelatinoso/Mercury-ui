@@ -38,30 +38,34 @@ local mercury = {}
 --- Get an array of installed Mercury packages
 ---@return packageMercury[]
 function mercury.getInstalled()
-    local response
-    local output
     local installedPackages
 
-    response = io.popen("mercury list -j", "r")
-    output = response:read("*all")
-    response:close()
-
-    installedPackages = cjson.decode(output)
-
-    return installedPackages
+    local pipe = io.popen("mercury list -j", "r")
+    if (pipe) then
+        local output = pipe:read("*all")
+        pipe:close()
+        if (output and not output:find("Warning,")) then
+            installedPackages = cjson.decode(output)
+            return installedPackages
+        end
+    end
+    return {}
 end
 
 -- Fetch the latest package index available on the repository
 -- TODO Add return annotation
 function mercury.fetchPackages()
     -- Get the package index output on json format
-    local pipe = io.popen("mercury fetch")
+    local pipe = io.popen("mercury fetch -j")
     if (pipe) then
         local response = pipe:read("*all")
         pipe:close()
-        local fetchedPackages = cjson.decode(response)
-        return fetchedPackages
+        if (response and not response:find("Error,")) then
+            local fetchedPackages = cjson.decode(response)
+            return fetchedPackages
+        end
     end
+    return {}
 end
 
 return mercury
