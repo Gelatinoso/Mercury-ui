@@ -28,10 +28,9 @@ function love.update(dt)
             -- Tabs bar
             ui:menubarBegin()
                 ui:layoutRow("dynamic", 30, 4)
-                ui:label("Mercury UI")
                 if ui:button("Available") then
                     title = "List of all packages available on the Mercury repository."
-                        searchEdit.value = ""
+                    searchEdit.value = ""
                         packages = mercury.fetchPackages()
                     end
                     if ui:button("Installed") then
@@ -39,8 +38,9 @@ function love.update(dt)
                         searchEdit.value = ""
                         packages = mercury.getInstalled()
                     end
-                    ui:edit("simple", searchEdit)
-                    height = height - 30
+                ui:spacing(1)
+                ui:edit("simple", searchEdit)
+                height = height - 30
             ui:menubarEnd()
             -- Packages list
             ui:layoutRow("dynamic", height, 1)
