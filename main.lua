@@ -11,7 +11,6 @@ local ui
 
 local windowWidth
 local windowHeight
-local installedPressed
 
 function love.load()
     love.keyboard.setKeyRepeat(true)
@@ -20,13 +19,14 @@ function love.load()
     windowHeight = love.graphics.getHeight()
 end
 
-local myedit = {value = ""}
+local searchEdit = {value = ""}
 local packages = mercury.getInstalled() or {}
 
 function love.update(dt)
     ui:frameBegin()
     if ui:windowBegin("Template Layout", 0, 0, windowWidth, windowHeight, "border") then
         x, y, width, height = ui:windowGetContentRegion()
+        -- top bar buttons
         ui:layoutRow("dynamic", 30, 3)
         height = height - 30
         if ui:button("Available packages") then
@@ -36,11 +36,12 @@ function love.update(dt)
             print(inspect(packages))
         end
 
-        ui:edit("simple", myedit)
-        
+        ui:edit("simple", searchEdit)
         ui:layoutRow("dynamic", height, 1)
         ui:groupBegin("packages", "scrollbar")
         ui:layoutRow("dynamic", height / 3, 3)
+
+        -- main view of the installed packages
         local packagesInRow = 0
         for packageIndex, package in pairs(packages) do
             packagesInRow = packagesInRow + 1
