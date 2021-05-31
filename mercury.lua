@@ -1,6 +1,11 @@
+------------------------------------------------------------------------------
+-- Mercury Communication
+-- Gelatinoso, Sledmine
+-- Module to communicate with Mercury available on the host system
+------------------------------------------------------------------------------
 local cjson = require "cjson"
 
-local model = {}
+local mercury = {}
 
 ---@class mercDependencies
 ---@field label string
@@ -32,13 +37,13 @@ local model = {}
 
 --- Get an array of installed Mercury packages
 ---@return packageMercury[]
-function model.getInstalled()
+function mercury.getInstalled()
     local response
     local output
     local installedPackages
 
-    response = io.popen('mercury list -j', 'r')
-    output = response:read('*all')
+    response = io.popen("mercury list -j", "r")
+    output = response:read("*all")
     response:close()
 
     installedPackages = cjson.decode(output)
@@ -46,4 +51,17 @@ function model.getInstalled()
     return installedPackages
 end
 
-return model
+-- Fetch the latest package index available on the repository
+-- TODO Add return annotation
+function mercury.fetchPackages()
+    -- Get the package index output on json format
+    local pipe = io.popen("mercury fetch")
+    if (pipe) then
+        local response = pipe:read("*all")
+        pipe:close()
+        local fetchedPackages = cjson.decode(response)
+        return fetchedPackages
+    end
+end
+
+return mercury
