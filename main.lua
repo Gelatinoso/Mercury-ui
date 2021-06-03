@@ -19,6 +19,7 @@ end
 local searchFilter = {value = "", placeholder = "Search..."}
 local packages = mercury.fetchPackages() or {}
 local title = "List of all packages available on the Mercury repository."
+local canInstall = true
 
 function love.update(dt)
     local windowWidth = love.graphics.getWidth()
@@ -31,6 +32,7 @@ function love.update(dt)
             ui:menubarBegin()
                 ui:layoutRow("dynamic", 30, 4)
                 if ui:button("Available") then
+                    canInstall = true
                     title = "List of all packages available on the Mercury repository."
                     searchFilter.value = ""
                         packages = mercury.fetchPackages()
@@ -39,6 +41,7 @@ function love.update(dt)
                         title = "List of all the packages that already installed on the game."
                         searchFilter.value = ""
                         packages = mercury.getInstalled()
+                        canInstall = false
                     end
                 ui:spacing(1)
                 ui:edit("simple", searchFilter)
@@ -55,9 +58,11 @@ function love.update(dt)
                     for packageIndex, package in pairs(packages) do
                         if (package.label:find(searchFilter.value)) then
                             packagesInRow = packagesInRow + 1
-                            if ui:button(package.label) then
-                                response = mercury.installPackage(package.label)
-                                print(response)
+                            if ui:button(package.label)then
+                                if canInstall then
+                                    response = mercury.installPackage(package.label)
+                                    print(response)
+                                end
                             end
                             if packagesInRow == 3 then
                                 ui:layoutRow("dynamic", height / 3, 3)
