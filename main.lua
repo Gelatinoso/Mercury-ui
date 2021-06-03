@@ -7,6 +7,7 @@ local nuklear = require "nuklear"
 local inspect = require "inspect"
 local mercury = require "mercury"
 
+
 local ui
 
 function love.load()
@@ -54,13 +55,17 @@ function love.update(dt)
                     for packageIndex, package in pairs(packages) do
                         if (package.label:find(searchFilter.value)) then
                             packagesInRow = packagesInRow + 1
-                            ui:button(package.label)
+                            if ui:button(package.label) then
+                                response = mercury.installPackage(package.label)
+                                print(response)
+                            end
                             if packagesInRow == 3 then
                                 ui:layoutRow("dynamic", height / 3, 3)
                             end
                         end
                     end
                 ui:groupEnd()
+                
         end
         ui:windowEnd()
     ui:frameEnd()
