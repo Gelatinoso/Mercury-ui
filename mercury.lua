@@ -4,6 +4,7 @@
 -- Module to communicate with Mercury available on the host system
 ------------------------------------------------------------------------------
 local cjson = require "cjson"
+local inspect = require "inspect"
 
 local mercury = {}
 
@@ -60,12 +61,23 @@ function mercury.fetchPackages()
     if (pipe) then
         local response = pipe:read("*all")
         pipe:close()
+        print(inspect(response))
         if (response and not response:find("Error,")) then
             local fetchedPackages = cjson.decode(response)
             return fetchedPackages
         end
     end
     return {}
+end
+
+-- Installs selected package
+function mercury.installPackage(label)
+    local pipe = io.popen("mercury install " .. label)
+    if(pipe) then
+        local response = pipe:read("*all")
+        pipe:close()
+        return response
+    end
 end
 
 return mercury
