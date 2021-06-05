@@ -58,11 +58,9 @@ function love.update(dt)
                     for packageIndex, package in pairs(packages) do
                         if (package.label:find(searchFilter.value)) then
                             packagesInRow = packagesInRow + 1
-                            if ui:button(package.label)then
-                                if canInstall then
-                                    response = mercury.installPackage(package.label)
-                                    print(response)
-                                end
+                            if ui:button(package.label) and canInstall then
+                                response = mercury.installPackage(package.label)
+                                print(response)
                             end
                             if packagesInRow == 3 then
                                 ui:layoutRow("dynamic", height / 3, 3)
