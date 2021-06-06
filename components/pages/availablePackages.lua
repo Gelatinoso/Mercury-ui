@@ -10,10 +10,10 @@ local function availablePackages(filter)
         -- Packages list
         -- Show packages loaded in memory
         for packageIndex, package in pairs(packages) do
-            if (package.label:find(filter)) then
+            if ((package.label .. package.version):find(filter)) then
                 ui:layoutRow("dynamic", 60, {0.9, 0.1})
                 ui:label(package.label .. " - " .. package.version)
-                if ui:button("Install") and canInstall then
+                if ui:button("Install") then
                     response = mercury.installPackage(package.label)
                     print(response)
                 end

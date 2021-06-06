@@ -5,7 +5,7 @@
 ------------------------------------------------------------------------------
 local nuklear = require "nuklear"
 local inspect = require "inspect"
-mercury = require "mercury"
+mercury = require "modules.mercury"
 
 function love.load()
     love.keyboard.setKeyRepeat(true)

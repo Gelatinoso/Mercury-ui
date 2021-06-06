@@ -91,4 +91,9 @@ function mercury.installPackage(label)
     end
 end
 
+function mercury.removePackage(label)
+    local result = os.execute("mercury remove " .. label)
+    return result
+end
+
 return mercury
