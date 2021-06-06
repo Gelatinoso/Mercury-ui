@@ -8,6 +8,17 @@ local inspect = require "inspect"
 
 local mercury = {}
 
+---@class packageMetadata
+---@field name string
+---@field label string
+---@field author string
+---@field version string
+---@field internalVersion string
+---@field category string
+---@field conflicts string[]
+---@field mirrors string[]
+---@field nextVersion string
+
 ---@class mercDependencies
 ---@field label string
 ---@field version string
@@ -54,7 +65,7 @@ function mercury.getInstalled()
 end
 
 -- Fetch the latest package index available on the repository
--- TODO Add return annotation
+---@return packageMetadata[]
 function mercury.fetchPackages()
     -- Get the package index output on json format
     local pipe = io.popen("mercury fetch -j")
@@ -73,7 +84,7 @@ end
 -- Installs selected package
 function mercury.installPackage(label)
     local pipe = io.popen("mercury install " .. label)
-    if(pipe) then
+    if (pipe) then
         local response = pipe:read("*all")
         pipe:close()
         return response
